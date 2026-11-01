@@ -16,7 +16,7 @@ jobs:
 
     env:
       KERNEL_REPO: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-      KERNEL_BRANCH: v7.4-rc1
+      KERNEL_BRANCH: 7.4-rc1
       KERNEL_DIR: kernel-source
       CONFIG_FILE: configs/config-wsl.MAIN
 
