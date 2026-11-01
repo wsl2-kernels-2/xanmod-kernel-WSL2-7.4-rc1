@@ -16,8 +16,7 @@ jobs:
 
     env:
       KERNEL_REPO: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-      KERNEL_TAG: v7.4-rc1
-      KERNEL_BRANCH: master
+      KERNEL_BRANCH: v7.4-rc1
       KERNEL_DIR: kernel-source
       CONFIG_FILE: configs/config-wsl.MAIN
 
@@ -43,10 +42,15 @@ jobs:
 
       - name: Clone Linux Stable Kernel Source
         run: |
-          git clone "$KERNEL_REPO" "$KERNEL_DIR"
-          cd "$KERNEL_DIR"
+          set -euo pipefail
 
-          git checkout -b "$KERNEL_BRANCH" "$KERNEL_TAG"
+          git clone \
+            --depth=1 \
+            --branch "$KERNEL_BRANCH" \
+            "$KERNEL_REPO" \
+            "$KERNEL_DIR"
+
+          cd "$KERNEL_DIR"
 
           echo "Kernel commit: $(git rev-parse HEAD)"
           echo "Kernel version: $(make -s kernelrelease)"
@@ -72,6 +76,8 @@ jobs:
 
       - name: Prepare Artifacts
         run: |
+          set -euo pipefail
+
           mkdir -p dist
 
           cp "$KERNEL_DIR/arch/x86/boot/bzImage" dist/bzImage
