@@ -15,8 +15,7 @@ jobs:
     timeout-minutes: 120
 
     env:
-      KERNEL_REPO: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git
-      KERNEL_BRANCH: 7.4-rc1
+      KERNEL_URL: https://github.com/torvalds/linux/archive/refs/tags/v7.4-rc1.zip
       KERNEL_DIR: kernel-source
       CONFIG_FILE: configs/config-wsl.MAIN
 
@@ -38,28 +37,31 @@ jobs:
             cpio \
             kmod \
             dwarves \
-            git
+            git \
+            curl \
+            unzip
 
-      - name: Clone Linux Stable Kernel Source
+      - name: Download Linux Kernel Source
         run: |
           set -euo pipefail
 
-          git clone \
-            --depth=1 \
-            --branch "$KERNEL_BRANCH" \
-            "$KERNEL_REPO" \
-            "$KERNEL_DIR"
+          curl -fL "$KERNEL_URL" -o linux-kernel.zip
 
-          cd "$KERNEL_DIR"
+          unzip -q linux-kernel.zip
 
-          echo "Kernel commit: $(git rev-parse HEAD)"
-          echo "Kernel version: $(make -s kernelrelease)"
+          mv linux-7.4-rc1 "$KERNEL_DIR"
+
+          rm linux-kernel.zip
+
+          echo "Kernel source: v7.4-rc1"
+          echo "Kernel release: $(make -s -C "$KERNEL_DIR" kernelrelease)"
 
       - name: Configure Kernel
         run: |
           set -euo pipefail
 
           test -f "$CONFIG_FILE"
+
           cp "$CONFIG_FILE" "$KERNEL_DIR/.config"
 
           make -C "$KERNEL_DIR" olddefconfig
@@ -82,11 +84,12 @@ jobs:
 
           cp "$KERNEL_DIR/arch/x86/boot/bzImage" dist/bzImage
 
-          git -C "$KERNEL_DIR" rev-parse HEAD \
-            > dist/kernel-commit.txt
+          echo "v7.4-rc1" > dist/kernel-version.txt
+
+          echo "$KERNEL_URL" > dist/kernel-source.txt
 
           make -s -C "$KERNEL_DIR" kernelrelease \
-            > dist/kernel-version.txt
+            > dist/kernel-release.txt
 
           sha256sum dist/bzImage > dist/bzImage.sha256
 
