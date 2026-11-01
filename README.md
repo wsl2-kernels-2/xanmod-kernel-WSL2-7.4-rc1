@@ -1,16 +1,17 @@
-# xanmod-kernel-WSL2
+# xanmod-kernel-WSL2-7.4-rc1
 
 ![Xanmod MAIN](https://github.com/Locietta/xanmod-kernel-WSL2/actions/workflows/MAIN.yml/badge.svg?branch=main)
 ![Xanmod LTS](https://github.com/Locietta/xanmod-kernel-WSL2/actions/workflows/LTS.yml/badge.svg?branch=main)
 ![](https://img.shields.io/github/license/Locietta/xanmod-kernel-WSL2)
 ![version](https://img.shields.io/github/v/release/Locietta/xanmod-kernel-WSL2)
 
-An **unofficial** [XanMod](https://gitlab.com/xanmod/linux) kernel port for **Windows Subsystem for Linux 2 (WSL2)**, featuring:
+An **unofficial** [XanMod](https://gitlab.com/xanmod/linux) kernel port for **Windows Subsystem for Linux 2 (WSL2) based on linux 7.4**, featuring:
 
 - **Microsoft's dxgkrnl** patches for GPU support
 - **Compiled with Clang + ThinLTO** for additional optimizations
 - **Automated builds** via GitHub Actions (always up-to-date)
 - **Multiple CPU-optimized variants** (x64v2, x64v3, Skylake, Zen3)
+- **Linux 7.4 Release Candidate 1 Build**
 
 ## Usage
 
